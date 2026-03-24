@@ -1,0 +1,13 @@
+with cte as 
+(
+select manufacturer,
+drug as top_drugs,units_sold,
+row_number() over
+(partition by manufacturer 
+order by units_sold desc ) as rnk 
+from pharmacy_sales 
+) 
+select manufacturer,
+top_drugs 
+from cte 
+where rnk <= 2
