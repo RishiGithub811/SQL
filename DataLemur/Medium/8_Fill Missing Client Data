@@ -1,0 +1,8 @@
+with cte as 
+(
+select product_id ,category,name,
+count(category) over ( order by product_id) as cat_count
+from products 
+) 
+select product_id ,max(category) over (partition by cat_count),name 
+from cte 
