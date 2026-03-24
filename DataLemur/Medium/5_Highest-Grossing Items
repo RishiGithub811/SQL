@@ -1,0 +1,13 @@
+select category,product,total_spend
+FROM
+(
+select category,product,sum(spend) as total_spend,
+RANK() 
+OVER (PARTITION BY category
+ORDER BY sum(spend) DESC) as rnk
+from product_spend
+where extract(year from transaction_date) = 2022
+group by  category, product
+) t 
+where rnk <= 2
+order by category,rnk
