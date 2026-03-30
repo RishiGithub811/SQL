@@ -1,0 +1,11 @@
+select transaction_date,user_id,count(product_id) as purchase_count 
+from 
+(
+SELECT product_id,user_id,
+transaction_date ,
+DENSE_RANK() OVER (PARTITION BY user_id ORDER BY transaction_date desc) rnk 
+FROM user_transactions
+) t
+where rnk = 1
+group by transaction_date,user_id 
+order by transaction_date;
