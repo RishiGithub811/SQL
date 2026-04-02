@@ -1,0 +1,17 @@
+--with cte as(
+select sum((num_seats)*(yearly_seat_cost)) as revenue,
+case when sum(num_seats) <100 then 'SMB'
+when sum(num_seats) >=100 and sum(num_seats) <999 then 'Mid-Market'
+when sum(num_seats) >=1000 then 'Enterprise' end as market
+from contracts
+group by customer_id
+--)
+
+
+
+
+
+--SELECT FLOOR(AVG(revenue) FILTER(WHERE market = 'SMB')) AS smb_avg_revenue,
+--       FLOOR(AVG(revenue) FILTER(WHERE market = 'Mid-Market')) AS mid_avg_revenue,
+--      FLOOR(AVG(revenue) FILTER(WHERE market = 'Enterprise')) AS enterprise_avg_revenue
+--FROM cte
