@@ -18,3 +18,27 @@ SELECT
 FROM cte
 ) t
 where status IS NOT NULL;
+
+
+2nd Method
+
+
+WITH cte AS (
+    SELECT 
+        employee_id,
+        salary,
+        title,
+        AVG(salary) OVER (PARTITION BY title) AS avg_sal 
+    FROM employee_pay
+)
+SELECT 
+    employee_id,
+    salary,
+    CASE 
+        WHEN salary > (2 * avg_sal) THEN 'Overpaid'
+        WHEN salary < (avg_sal / 2) THEN 'Underpaid'
+    END AS status
+FROM cte
+WHERE salary > (2 * avg_sal)
+   OR salary < (avg_sal / 2);
+
